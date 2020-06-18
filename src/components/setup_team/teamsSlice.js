@@ -1,12 +1,9 @@
 // import {} from 
 
+import { arrayToObject } from "../../utility";
+
 const { createSlice } = require("@reduxjs/toolkit");
 
-const arrayToObject = (array, keyField) =>
-    array.reduce((obj, item) => {
-        obj[item[keyField]] = item
-        return obj
-    }, {})
 
 export const teamsSlice = createSlice({
     name: "teams",

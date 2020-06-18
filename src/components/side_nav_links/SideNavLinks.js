@@ -13,12 +13,10 @@ export const SideNavLinks = ({ routes }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        getTeams().then(({ success, data }) => {
+        getTeams().then((data) => {
             dispatch(teamsSlice.actions.getTeams(data))
         })
     }, [])
-
-    let showProjects = {}
 
     return (
         <div>

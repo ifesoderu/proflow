@@ -4,6 +4,7 @@ import ProflowFullLogo from '../../assets/img/ProflowFullLogo.svg'
 import authImage from '../../assets/img/authImage.svg'
 import { loginPostRequest } from './loginService'
 import { loginRequest, loginFailure, loginSuccess, logout, selectAuth } from './loginSlice'
+import { authCompleted, authNotCompleted } from './isLoginRouteSlice'
 import { neutralAlertAsync } from '../alert/alertSlice'
 import { useHistory } from 'react-router-dom';
 export const Login = (store) => {
@@ -16,14 +17,17 @@ export const Login = (store) => {
     const handleSignInSubmit = () => {
         dispatch(loginRequest({ email }))
         loginPostRequest(email, password).then(
-            token => {
-                dispatch(loginSuccess({ email, token }))
+            (data) => {
+                console.log(data)
+                dispatch(loginSuccess({ email, data }))
                 dispatch(neutralAlertAsync())
+                dispatch(authCompleted())
                 history.push('/dashboard');
             },
             error => {
                 dispatch(loginFailure(error.toString()))
                 dispatch(neutralAlertAsync())
+
             }
         )
     }
