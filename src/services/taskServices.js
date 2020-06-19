@@ -2,7 +2,7 @@ import { customFetchGet, customFetchUpdate } from "../utility"
 import { successAlert, neutralAlert } from "../components/alert/alertSlice"
 
 // tasks/:pid/:sid
-export const getTasksBySectionAndProjectId = ({ sectionID, projectID }) => customFetchGet(`/tasks/${projectID}/${sectionID}`)
+export const getTasksBySectionsAndProjectId = (projectID) => customFetchGet(`/tasks/${projectID}`)
 
 // tasks/:email
 export const getPersonalTasks = memberEmail => customFetchGet(`/personaltasks/${memberEmail}`)

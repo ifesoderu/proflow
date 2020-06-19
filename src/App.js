@@ -26,7 +26,7 @@ const App = () => {
     { path: '/dashboard', Main: () => <Dashboard />, title: "Dashboard" },
     { path: '/tasks', Main: () => <MyTasks />, title: "My Tasks" },
     { path: '/setup-team', Main: () => <SetupTeam /> },
-    { path: `/project/:projectId`, Main: () => <ProjectDetails /> },
+    { path: `/project/:projectID`, Main: () => <ProjectDetails /> },
   ]
 
   return (
@@ -41,7 +41,7 @@ const App = () => {
         <div className={isLoginRoute ? 'w-full' : 'flex-grow float-right z-0 mt-16'} >
           <div className="flex ">
             <div className="max-w-xs w-88"></div>
-            <div className="flex-grow max-w-6xl mx-auto">
+            <div className="flex-grow">
               <Switch>
                 {
                   routes.map(({ path, Main, title }, index) => (

@@ -10,10 +10,11 @@ import { errorAlert, neutralAlert } from '../alert/alertSlice'
 import EditIcon from '../../assets/img/editIcon.svg'
 import DeleteIcon from '../../assets/img/deleteIcon.svg'
 import FavouriteIcon from '../../assets/img/favouriteIcon.svg'
+import { ProjectBoard } from '../project_board/ProjectBoard'
 
 
 export const ProjectDetails = () => {
-    const { projectId } = useParams()
+    const { projectID } = useParams()
     const history = useHistory()
     const dispatch = useDispatch()
     const [activeTab, setActiveTab] = useState('board')
@@ -26,7 +27,7 @@ export const ProjectDetails = () => {
         if (!email) { history.push('/login') }
         getMemberProjects(email).then(
             projects => {
-                const projectDetails = arrayToObject(projects, 'project_id')[projectId]
+                const projectDetails = arrayToObject(projects, 'project_id')[projectID]
                 if (!projectDetails) { throw Error(`You are not a member of the team that created the project`) }
                 dispatch(loadOpenProject(projectDetails))
             },
@@ -42,11 +43,10 @@ export const ProjectDetails = () => {
         })
     }, [])
     const renderActiveTab = param => {
+        console.log(openedProject)
         switch (param) {
             case 'board':
-
-                break;
-
+                return <ProjectBoard projectID={projectID} projectDesc={openedProject.description} />
             case 'timeline':
 
                 break;
@@ -94,7 +94,7 @@ export const ProjectDetails = () => {
                     </span>
                 </div>
             </div>
-            <div className="pt-16" style={{ backgroundColor: "#EFEFEF" }}>
+            <div className="h-screen overflow-x-auto" style={{ backgroundColor: "#EFEFEF" }}>
                 {renderActiveTab(activeTab)}
             </div>
         </div>
