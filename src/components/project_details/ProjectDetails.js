@@ -11,6 +11,7 @@ import EditIcon from '../../assets/img/editIcon.svg'
 import DeleteIcon from '../../assets/img/deleteIcon.svg'
 import FavouriteIcon from '../../assets/img/favouriteIcon.svg'
 import { ProjectBoard } from '../project_board/ProjectBoard'
+import { ProjectComment } from '../project_comments/ProjectComments'
 
 
 export const ProjectDetails = () => {
@@ -51,8 +52,7 @@ export const ProjectDetails = () => {
 
                 break;
             case 'comments':
-
-                break;
+                return <ProjectComment projectID={projectID} />
             case 'progress':
 
                 break;
@@ -94,7 +94,7 @@ export const ProjectDetails = () => {
                     </span>
                 </div>
             </div>
-            <div className="h-screen overflow-x-auto" style={{ backgroundColor: "#EFEFEF" }}>
+            <div className="overflow-x-auto" style={{ backgroundColor: "#EFEFEF" }}>
                 {renderActiveTab(activeTab)}
             </div>
         </div>

@@ -10,6 +10,7 @@ import addProjectModalReducer from '../components/project_list/addProjectModal';
 import openedProjectReducer from '../components/project_details/openedProjectSlice';
 import loadedSectionsReducer from '../components/project_board/loadedSectionsSlice';
 import loadedTasksReducer from '../components/project_board/loadedTasksSlice';
+import projectCommentReducer from '../components/project_comments/projectCommentsSlice';
 
 export default configureStore({
   reducer: {
@@ -22,7 +23,8 @@ export default configureStore({
     addProjectModal: addProjectModalReducer,
     openedProject: openedProjectReducer,
     loadedSections: loadedSectionsReducer,
-    loadedTasks: loadedTasksReducer
+    loadedTasks: loadedTasksReducer,
+    projectComments: projectCommentReducer
   },
   // middleware: [composeWithDevTools, ...getDefaultMiddleware()]
 });

@@ -28,7 +28,7 @@ export const ProjectBoard = ({ projectID, projectDesc }) => {
             })
     }, [])
     return (
-        <div className="mx-10">
+        <div className="mx-10 h-screen">
             <span className="block mb-4 text-gray-800 font-semibold cursor-pointer py-6" onClick={() => { setShowDescription(!showDescription) }}>{showDescription ? (projectDesc) : 'Show project description'}</span>
             <div className="flex flex-no-wrap">
                 {loadedSections.slice().reverse().map(section => <ProjectSection {...section} tasks={loadedTasks} />)}
