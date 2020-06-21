@@ -3,16 +3,16 @@ import { arrayToObject } from "../../utility";
 
 export const loadedTasksSlice = createSlice({
     name: 'openedSections',
-    initialState: [],
+    initialState: {},
     reducers: {
-        loadTasks: (state, action) => state = action.payload
-        // {
-        //     reducer: ,
-        //     prepare: (value) => ({ payload: arrayToObject(value, 'id') })
-        // }
+        loadTasks: {
+            reducer: (state, action) => action.payload,
+            prepare: (value) => ({ payload: arrayToObject(value, 'id') })
+        },
+        addNewTask: (state, action) => ({ ...state, [action.payload.id]: action.payload })
     }
 });
 
-export const { loadTasks } = loadedTasksSlice.actions
+export const { loadTasks, addNewTask } = loadedTasksSlice.actions
 
 export default loadedTasksSlice.reducer

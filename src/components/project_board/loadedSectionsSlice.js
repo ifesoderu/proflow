@@ -3,12 +3,17 @@ import { arrayToObject } from "../../utility";
 
 export const openedSectionsSlice = createSlice({
     name: 'openedSections',
-    initialState: [],
+    initialState: {},
     reducers: {
-        loadSections: (state, action) => state = action.payload
+        loadSections: {
+            reducer: (state, action) => action.payload,
+            prepare: (value) => { return ({ payload: arrayToObject(value, 'id') }) }
+        },
+        addNewSection: (state, action) => ({ ...state, [action.payload.id]: action.payload }),
+        updateSectionTitle: (state, action) => ({ ...state, [action.payload.id]: action.payload })
     }
 });
 
-export const { loadSections } = openedSectionsSlice.actions
+export const { loadSections, addNewSection, updateSectionTitle } = openedSectionsSlice.actions
 
 export default openedSectionsSlice.reducer

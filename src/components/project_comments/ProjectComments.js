@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { getProjectComments } from '../../services/commentServices'
+import { getProjectComments, postProjectComment } from '../../services/commentServices'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadProjectComments } from './projectCommentsSlice'
+import { loadProjectComments, addProjectComment } from './projectCommentsSlice'
 import ProfileImage from '../../assets/img/profileImage.svg'
 import PostIcon from '../../assets/img/postIcon.svg'
+import { ProjectComment } from './ProjectComment'
+import { errorAlert, neutralAlert, neutralAlertAsync } from '../alert/alertSlice'
 
-export const ProjectComment = ({ projectID }) => {
+export const ProjectComments = ({ projectID }) => {
+    const [newComment, setNewComment] = useState('')
     const dispatch = useDispatch()
-    const [showTime, setShowTime] = useState(false)
     const projectComments = useSelector(state => state.projectComments)
     useEffect(() => {
         getProjectComments(projectID).then(
@@ -16,6 +18,22 @@ export const ProjectComment = ({ projectID }) => {
             }
         )
     }, [])
+    const postComment = (body) => {
+        postProjectComment(body).then(
+            res => {
+                console.log(res)
+                if (res.success) {
+                    dispatch(addProjectComment(res.data[0]))
+                } else {
+                    throw new Error('Could not post comment')
+                }
+            },
+            error => {
+                dispatch(errorAlert(error.toSting()))
+                dispatch(neutralAlertAsync())
+            }
+        )
+    }
     const renderProjectComments = projectComments => {
         return projectComments.map(({ content, owner_email }) => {
             const loggedInUserEmail = localStorage.getItem('email')
@@ -29,15 +47,18 @@ export const ProjectComment = ({ projectID }) => {
         })
     }
     return (
-        <div className="max-w-xl pt-5 mx-auto">
-            <div className="h-64 overflow-y-auto">
+        <div className="max-w-xl relative pt-5 mx-auto">
+            <div className="overflow-y-auto" style={{ height: '70%' }}>
                 {renderProjectComments(projectComments)}
             </div>
 
-            <div className="mt-8 mb-0">
-                <textarea placeholder="Ask a question or post an update..." className="w-full p-4 h-32 border border-primaryred block rounded-lg mb-6" />
-                <button className="float-right py-2 px-4">
-                    <img src={PostIcon} alt="" className="mr-1 inline-block w-6 h-6" />
+            <div className="fixed w-full max-w-xl" style={{ backgroundColor: "#EFEFEF" }}>
+                <textarea placeholder="Ask a question or post an update..." value={newComment} onChange={e => { setNewComment(e.target.value) }} className="w-full p-4 h-20 border border-primaryred block rounded-lg mb-6" />
+                <button className="py-2 px-4 float-right" onClick={e => {
+                    e.preventDefault()
+                    postComment({ projectID, owner_email: localStorage.getItem('email'), content: newComment })
+                }}>
+                    <img src={PostIcon} alt="post icon" className="mr-1 inline-block w-6 h-6" />
                     Post
                 </button>
             </div>

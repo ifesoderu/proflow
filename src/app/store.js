@@ -11,6 +11,7 @@ import openedProjectReducer from '../components/project_details/openedProjectSli
 import loadedSectionsReducer from '../components/project_board/loadedSectionsSlice';
 import loadedTasksReducer from '../components/project_board/loadedTasksSlice';
 import projectCommentReducer from '../components/project_comments/projectCommentsSlice';
+import nestedSectionsReducer from '../components/project_board/nestedSectionsSlice';
 
 export default configureStore({
   reducer: {
@@ -24,7 +25,8 @@ export default configureStore({
     openedProject: openedProjectReducer,
     loadedSections: loadedSectionsReducer,
     loadedTasks: loadedTasksReducer,
-    projectComments: projectCommentReducer
+    projectComments: projectCommentReducer,
+    nestedSections: nestedSectionsReducer,
   },
   // middleware: [composeWithDevTools, ...getDefaultMiddleware()]
 });

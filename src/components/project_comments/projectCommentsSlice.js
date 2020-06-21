@@ -5,7 +5,7 @@ export const projectCommentSlice = createSlice({
     initialState: [],
     reducers: {
         loadProjectComments: (state, action) => state = action.payload,
-        addProjectComment: (state, action) => state = state.push(action.payload)
+        addProjectComment: (state, action) => [...state, action.payload]
     }
 });
 

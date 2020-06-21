@@ -38,10 +38,10 @@ const App = () => {
         <div className={isLoginRoute ? '' : 'max-w-xs z-40 fixed'}>
           {!isLoginRoute && < SideNav routes={routes} />}
         </div>
-        <div className={isLoginRoute ? 'w-full' : 'flex-grow float-right z-0 mt-16'} >
-          <div className="flex ">
+        <div className={isLoginRoute ? 'w-full' : 'flex-grow float-right z-0'} >
+          <div className="flex" >
             <div className="max-w-xs w-88"></div>
-            <div className="flex-grow">
+            <div className="flex-grow" style={{ backgroundColor: "#EFEFEF" }}>
               <Switch>
                 {
                   routes.map(({ path, Main, title }, index) => (

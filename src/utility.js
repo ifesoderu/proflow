@@ -32,9 +32,9 @@ export const customFetchPost = (path, body, onSuccess) => {
         body: JSON.stringify({ ...body })
     })
         .then(handleResponse)
-        .then(res => {
-            checkResponse(res, body, onSuccess)
-        })
+    // .then(res => {
+    //     checkResponse(res, body, onSuccess)
+    // })
 }
 
 export const customFetchUpdate = (path, body, onSuccess) => {
@@ -48,8 +48,17 @@ export const customFetchUpdate = (path, body, onSuccess) => {
         .then(handleResponse)
 }
 
-export const arrayToObject = (array, keyField) =>
+export const arrayToObject = (array, keyField) => (
     array.reduce((obj, item) => {
         obj[item[keyField]] = item
         return obj
-    }, {})
+    }, {}))
+
+export default function debounce(callback, wait) {
+    let timeout;
+    return (...args) => {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => callback.apply(context, args), wait);
+    };
+}
