@@ -3,12 +3,10 @@ import { getFavouritedProjects } from '../../services/projectServices'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFavouriteProjects } from './favouriteProjectListSlice'
-import { openAddProjectModal } from './addProjectModal'
+import { openAddProjectModal } from './addProjectModalSlice'
 import { Project, FavouriteProjectButton } from './FavouriteProjectButton'
 
-import AddProjectIcon from '../../assets/img/AddProjectIcon.svg'
-
-
+import AddProjectIcon from '../../assets/img/AddProjectIcon.svg';
 
 export const ProjectList = () => {
     const history = useHistory()
@@ -21,20 +19,21 @@ export const ProjectList = () => {
     }, [])
 
     const handleAddProject = () => {
+        console.log('clicked')
         dispatch(openAddProjectModal())
     }
 
     return (
         <ul className="flex flex-wrap">
             <li className="w-32">
-                <button className="p-0 bg-opacity-0">
+                <button onClick={() => { handleAddProject() }} className="p-0 bg-opacity-0">
                     <img src={AddProjectIcon} alt="add project" />
                 </button>
                 <span className="text-sm block mx-auto text-center font-semibold text-gray-600">New Project</span>
             </li>
             {Object.keys(favouriteProjects).map((projectIdex, index) => {
                 return (
-                    <FavouriteProjectButton project={favouriteProjects[projectIdex]} handleAddProject={handleAddProject} />
+                    <FavouriteProjectButton project={favouriteProjects[projectIdex]} />
                 )
             })}
         </ul >

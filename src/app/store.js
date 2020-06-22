@@ -6,7 +6,7 @@ import teamsReducer from '../components/setup_team/teamsSlice';
 import { composeWithDevTools } from 'redux-devtools-extension'
 import myTaskListReducer from '../components/task_list/myTaskListSlice';
 import favouriteProjectListReducer from '../components/project_list/favouriteProjectListSlice';
-import addProjectModalReducer from '../components/project_list/addProjectModal';
+import addProjectModalReducer from '../components/project_list/addProjectModalSlice';
 import openedProjectReducer from '../components/project_details/openedProjectSlice';
 import loadedSectionsReducer from '../components/project_board/loadedSectionsSlice';
 import loadedTasksReducer from '../components/project_board/loadedTasksSlice';

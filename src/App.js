@@ -17,10 +17,12 @@ import { Alert } from './components/alert/Alert';
 
 import ProfileImage from './assets/img/profileImage.svg'
 import { ProjectDetails } from './components/project_details/ProjectDetails';
-
+import { AddProjectModal } from './components/add_project_modal/AddProjectModal'
+import { AddProject } from './components/add_project/AddProject';
 
 const App = () => {
   const isLoginRoute = useSelector(state => state.isLoginRoute)
+  const addProjectModal = useSelector(state => state.addProjectModal)
   const routes = [
     { path: '/login', Main: () => <Login /> },
     { path: '/dashboard', Main: () => <Dashboard />, title: "Dashboard" },
@@ -32,10 +34,13 @@ const App = () => {
   return (
     <Router>
       <div className={isLoginRoute ? "absolute top-0 left-0" : "absolute top-0 right-0"}>
-        <Alert className="z-50" />
+        <Alert className="z-40" />
       </div>
+      {addProjectModal && (<AddProjectModal>
+        <AddProject />
+      </AddProjectModal>)}
       <div className={isLoginRoute ? '' : 'flex'}>
-        <div className={isLoginRoute ? '' : 'max-w-xs z-40 fixed'}>
+        <div className={isLoginRoute ? '' : 'max-w-xs z-30 fixed'}>
           {!isLoginRoute && < SideNav routes={routes} />}
         </div>
         <div className={isLoginRoute ? 'w-full' : 'flex-grow float-right z-0'} >

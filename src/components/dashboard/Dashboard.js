@@ -9,7 +9,7 @@ import { ProjectList } from '../project_list/ProjectList'
 
 export const Dashboard = () => {
     return (
-        <div className='mx-10'>
+        <div className='px-10 pt-16 bg-white '>
             <div className="flex">
                 <div className="w-5/6">
                     <h2 className="font-bold">Dashboard</h2>
