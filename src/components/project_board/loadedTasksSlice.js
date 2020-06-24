@@ -9,10 +9,17 @@ export const loadedTasksSlice = createSlice({
             reducer: (state, action) => action.payload,
             prepare: (value) => ({ payload: arrayToObject(value, 'id') })
         },
-        addNewTask: (state, action) => ({ ...state, [action.payload.id]: action.payload })
+        addNewTask: (state, action) => ({ ...state, [action.payload.id]: action.payload }),
+        editTask: (state, action) => ({ ...state, [action.payload.id]: action.payload }),
+        deleteSelectedTask: (state, action) => {
+            let tempState = { ...state }
+
+            delete tempState[action.payload.tid]
+            return { ...tempState }
+        }
     }
 });
 
-export const { loadTasks, addNewTask } = loadedTasksSlice.actions
+export const { loadTasks, addNewTask, editTask, deleteSelectedTask } = loadedTasksSlice.actions
 
 export default loadedTasksSlice.reducer

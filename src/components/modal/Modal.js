@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 
-const addProjectModalRoot = document.getElementById('add-project-modal-root');
+const modalRoot = document.getElementById('modal-root');
 
-export const AddProjectModal = ({ children }) => {
+export const Modal = ({ children }) => {
     const el = document.createElement('div');
 
 
     useEffect(() => {
-        addProjectModalRoot.appendChild(el)
+        modalRoot.appendChild(el)
         return () => {
-            addProjectModalRoot.removeChild(el)
+            modalRoot.removeChild(el)
         }
     }, [])
 

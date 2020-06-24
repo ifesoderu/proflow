@@ -1,16 +1,28 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import ProfileImage from '../../assets/img/profileImage.svg'
 import { TaskList } from '../task_list/TaskList'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { loginSuccess } from '../login/loginSlice'
 import { ProjectList } from '../project_list/ProjectList'
+import { getFavouriteProjects } from '../project_list/favouriteProjectListSlice'
+import { getFavouritedProjects } from '../../services/projectServices'
 
 export const Dashboard = () => {
+    const favouriteProjects = useSelector(state => state.favouriteProjects)
+    const dispatch = useDispatch()
+    const history = useHistory()
+
+    useEffect(() => {
+        const email = localStorage.getItem('email')
+        if (!email) { history.push('/login') }
+
+        getFavouritedProjects(email).then(data => { dispatch(getFavouriteProjects(data)) })
+    }, [])
     return (
-        <div className='px-10 pt-16 bg-white '>
-            <div className="flex">
+        <div className='px-10 pt-16 bg-white ' >
+            <div className="flex mx-auto max-w-6xl">
                 <div className="w-5/6">
                     <h2 className="font-bold">Dashboard</h2>
                 </div>
@@ -25,20 +37,21 @@ export const Dashboard = () => {
                 </div>
                 <div className="max-w-3xl mx-auto">
                     <ul>
-                        <TaskList />
+                        <TaskList limit={true} />
                     </ul>
                 </div>
             </div>
-            <hr className="my-10" />
+            <hr className="my-10 mx-auto max-w-6xl" />
             <div>
                 <div className="max-w-3xl mt-10 mb-8  mx-auto">
                     <div className="flex">
                         <h3 className="flex-grow font-semibold">Projects</h3>
-                        <button className="text-sm mt-1 py-0 bg-opacity-0"><span className="flex-grow font-medium  text-right text-gray-500">View all</span></button>
+                        <button className="text-sm mt-1 py-0 bg-opacity-0"><span className="flex-grow font-medium  text-right text-gray-500"></span></button>
+                        {/* <button className="text-sm mt-1 py-0 bg-opacity-0"><span className="flex-grow font-medium  text-right text-gray-500">View all</span></button> */}
                     </div>
                 </div>
                 <div className="max-w-3xl mx-auto">
-                    <ProjectList />
+                    <ProjectList projects={favouriteProjects} />
                 </div>
             </div>
         </div>

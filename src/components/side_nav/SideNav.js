@@ -9,7 +9,7 @@ import { SideNavLinks } from '../side_nav_links/SideNavLinks'
 
 export const SideNav = ({ routes }) => {
     return (
-        <div className="w-80 inline-block h-full max-w-xs bg-primaryred ">
+        <div className="inline-block h-screen overflow-y-scroll bg-primaryred" style={{ width: '21rem', maxWidth: '21rem' }}>
             <div className="py-10 mx-auto w-64 flex">
                 <div className="w-1/8 text-right">
                     <button className="py-0">

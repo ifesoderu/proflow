@@ -628,11 +628,18 @@ button {
 }
 
 a {
-  font-size: 1.25rem;
   --text-opacity: 1;
   color: #fff;
   color: rgba(255, 255, 255, var(--text-opacity));
 }
+
+/* table,
+th,
+td {
+  padding: 10px;
+  border: 1px solid black;
+  border-collapse: collapse;
+} */
 
 .container {
   width: 100%;

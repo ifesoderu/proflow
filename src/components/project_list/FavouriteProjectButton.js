@@ -8,7 +8,7 @@ export const FavouriteProjectButton = ({ project }) => {
     const dispatch = useDispatch();
 
     return (
-        <li className="w-32 ml-12">
+        <li className="w-32 m-4">
             <Link className=" py-10 rounded-lg block mb-5 w-full h-32 bg-red-600" to={`/project/${project.project_id}`}>
                 <img src={KanbanIcon} className="mx-auto" alt="Kanban Icon" />
             </Link>

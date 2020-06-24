@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useParams
 } from 'react-router-dom';
 import { createSlice } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux';
@@ -17,18 +18,25 @@ import { Alert } from './components/alert/Alert';
 
 import ProfileImage from './assets/img/profileImage.svg'
 import { ProjectDetails } from './components/project_details/ProjectDetails';
-import { AddProjectModal } from './components/add_project_modal/AddProjectModal'
+import { TeamDetails } from './components/team_details/TeamDetails';
+import { Modal } from './components/modal/Modal'
 import { AddProject } from './components/add_project/AddProject';
+import { EditTask } from './components/edit_task/EditTask';
+import { getAllProjects } from './services/projectServices';
 
 const App = () => {
   const isLoginRoute = useSelector(state => state.isLoginRoute)
   const addProjectModal = useSelector(state => state.addProjectModal)
+  const editTaskModal = useSelector(state => state.editTaskModal)
+  const currentlyOpenedTask = useSelector(state => state.currentlyOpenedTask)
   const routes = [
+    { path: '/', Main: () => <Login /> },
     { path: '/login', Main: () => <Login /> },
     { path: '/dashboard', Main: () => <Dashboard />, title: "Dashboard" },
     { path: '/tasks', Main: () => <MyTasks />, title: "My Tasks" },
     { path: '/setup-team', Main: () => <SetupTeam /> },
     { path: `/project/:projectID`, Main: () => <ProjectDetails /> },
+    { path: `/team/:teamID`, Main: () => <TeamDetails /> },
   ]
 
   return (
@@ -36,17 +44,24 @@ const App = () => {
       <div className={isLoginRoute ? "absolute top-0 left-0" : "absolute top-0 right-0"}>
         <Alert className="z-40" />
       </div>
-      {addProjectModal && (<AddProjectModal>
-        <AddProject />
-      </AddProjectModal>)}
+      {addProjectModal && (
+        <Modal>
+          <AddProject />
+        </Modal>
+      )}
+      {editTaskModal && (
+        <Modal>
+          <EditTask task={currentlyOpenedTask} />
+        </Modal>
+      )}
       <div className={isLoginRoute ? '' : 'flex'}>
         <div className={isLoginRoute ? '' : 'max-w-xs z-30 fixed'}>
           {!isLoginRoute && < SideNav routes={routes} />}
         </div>
         <div className={isLoginRoute ? 'w-full' : 'flex-grow float-right z-0'} >
           <div className="flex" >
-            <div className="max-w-xs w-88"></div>
-            <div className="flex-grow" style={{ backgroundColor: "#EFEFEF" }}>
+            <div className={!isLoginRoute && "max-w-xs w-88"}></div>
+            <div className="flex-grow" style={isLoginRoute ? { backgroundColor: "#fff" } : { backgroundColor: "#EFEFEF" }}>
               <Switch>
                 {
                   routes.map(({ path, Main, title }, index) => (
@@ -54,6 +69,7 @@ const App = () => {
                     <Route
                       key={index}
                       path={path}
+                      exact
                       children={<Main />}
                     />
                   ))

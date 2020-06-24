@@ -1,4 +1,4 @@
-import { customFetchGet, customFetchPost, customFetchUpdate } from "../utility"
+import { customFetchGet, customFetchPost, customFetchUpdate, customFetchDelete } from "../utility"
 
 // /sections/:pid
 export const getProjectSections = (projectID) => customFetchGet(`/sections/${projectID}`)
@@ -11,4 +11,6 @@ export const postSection = ({ name, projectID: project_id }) => customFetchPost(
 
 
 // /section
-export const updateSection = ({ id, sectionTitle: name }) => customFetchUpdate(`/section`, { id, name })
+export const updateSection = ({ id, sectionTitle: name }) => customFetchUpdate(`/section`, { id, name });
+
+export const deleteSection = (id) => customFetchDelete('/section', { id })

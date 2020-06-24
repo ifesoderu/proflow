@@ -10,10 +10,15 @@ export const openedSectionsSlice = createSlice({
             prepare: (value) => { return ({ payload: arrayToObject(value, 'id') }) }
         },
         addNewSection: (state, action) => ({ ...state, [action.payload.id]: action.payload }),
-        updateSectionTitle: (state, action) => ({ ...state, [action.payload.id]: action.payload })
+        updateSectionTitle: (state, action) => ({ ...state, [action.payload.id]: action.payload }),
+        deleteSelectedSection: (state, action) => {
+            let tempState = { ...state }
+            delete tempState[action.payload.id]
+            return { ...tempState }
+        }
     }
 });
 
-export const { loadSections, addNewSection, updateSectionTitle } = openedSectionsSlice.actions
+export const { loadSections, addNewSection, deleteSelectedSection, updateSectionTitle } = openedSectionsSlice.actions
 
 export default openedSectionsSlice.reducer

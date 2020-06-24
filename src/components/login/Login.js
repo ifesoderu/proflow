@@ -19,17 +19,23 @@ export const Login = (store) => {
         loginPostRequest(email, password).then(
             (data) => {
                 console.log(data)
+                if (!data.success) { throw new Error(`${data.message}`) }
                 dispatch(loginSuccess({ email, data }))
                 dispatch(neutralAlertAsync())
                 dispatch(authCompleted())
-                history.push('/dashboard');
+                localStorage.setItem('email', email)
+                localStorage.setItem('token', data)
+                history.push('/dashboard')
             },
             error => {
                 dispatch(loginFailure(error.toString()))
                 dispatch(neutralAlertAsync())
 
             }
-        )
+        ).catch(e => {
+            dispatch(loginFailure(e.toString()))
+            dispatch(neutralAlertAsync())
+        })
     }
     return (
         <div className="flex h-screen">

@@ -21,8 +21,16 @@ button {
 }
 
 a {
-  @apply text-xl text-white;
+  @apply text-white;
 }
+
+/* table,
+th,
+td {
+  padding: 10px;
+  border: 1px solid black;
+  border-collapse: collapse;
+} */
 
 @tailwind components;
 

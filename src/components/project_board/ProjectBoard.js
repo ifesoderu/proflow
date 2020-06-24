@@ -41,25 +41,29 @@ export const ProjectBoard = ({ projectID, projectDesc }) => {
                 dispatch(loadTasks(data))
             }
         )
-    }, [])
+    }, [projectID])
 
     useEffect(() => {
         if (loadedSections.length === 0) return
+        console.log(loadedTasks)
         let nestedSections = {}
         Object.values(loadedSections).forEach(({ id, name }) => {
             nestedSections[`${id}`] = { id, name, taskIDs: [] }
         });
         if (Object.keys(nestedSections).length === 0) return
         Object.values(loadedTasks).forEach((task) => {
+            console.log(loadedTasks)
+            console.log(task)
             const { section_id, id } = task
             nestedSections[`${section_id}`] = { ...nestedSections[`${section_id}`], taskIDs: [...nestedSections[`${section_id}`].taskIDs, `${id}`] }
         });
-        console.log(nestedSections)
         dispatch(addNestedSections(nestedSections))
     }, [loadedSections, loadedTasks])
 
     const renderSections = (nestedSections) => Object.values(nestedSections).map((section, index) => {
-        const fullTask = section.taskIDs.map((id) => loadedTasks[id])
+        console.log(nestedSections)
+        console.log(loadedTasks)
+        const fullTask = section.taskIDs.filter(id => Object.keys(loadedTasks).includes(id)).map((id) => loadedTasks[id])
         return <ProjectSection key={`${section.id}`} {...section} tasks={fullTask} projectID={projectID} />
     })
 
@@ -130,14 +134,14 @@ export const ProjectBoard = ({ projectID, projectDesc }) => {
 
 
     }
-
+    console.log(nestedSections)
     return (
         <div className="relative">
 
             <DragDropContext
                 onDragEnd={onDragEnd}
             >
-                <div className="mx-10 pt-32">
+                <div className="mx-10 pt-32" style={{ minHeight: '100vh' }}>
                     <span className="block my-4 text-gray-800 font-semibold cursor-pointer py-6" onClick={() => { setShowDescription(!showDescription) }}>{showDescription ? (projectDesc) : 'Show project description'}</span>
                     <div className="flex flex-no-wrap">
                         {renderSections(nestedSections)}

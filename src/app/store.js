@@ -12,6 +12,11 @@ import loadedSectionsReducer from '../components/project_board/loadedSectionsSli
 import loadedTasksReducer from '../components/project_board/loadedTasksSlice';
 import projectCommentReducer from '../components/project_comments/projectCommentsSlice';
 import nestedSectionsReducer from '../components/project_board/nestedSectionsSlice';
+import joinedTeamsReducer from '../components/side_nav/joinedTeamsSlice';
+import editTaskModalReducer from '../components/project_board/editTaskModalSlice';
+import currentlyOpenedTaskReducer from '../components/project_board/currentlyOpenedTaskSlice';
+import teamIDofOpenedProjectReducer from '../components/project_details/teamIDofOpenedProjectSlice';
+
 
 export default configureStore({
   reducer: {
@@ -19,9 +24,13 @@ export default configureStore({
     authentication: loginReducer || { email: localStorage.getItem('email') },
     alert: alertReducer,
     teams: teamsReducer,
+    teamIDofOpenedProject: teamIDofOpenedProjectReducer,
+    joinedTeams: joinedTeamsReducer,
     myTasks: myTaskListReducer,
+    currentlyOpenedTask: currentlyOpenedTaskReducer,
     favouriteProjects: favouriteProjectListReducer,
     addProjectModal: addProjectModalReducer,
+    editTaskModal: editTaskModalReducer,
     openedProject: openedProjectReducer,
     loadedSections: loadedSectionsReducer,
     loadedTasks: loadedTasksReducer,

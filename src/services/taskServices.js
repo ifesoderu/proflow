@@ -1,4 +1,4 @@
-import { customFetchGet, customFetchUpdate, customFetchPost } from "../utility"
+import { customFetchGet, customFetchUpdate, customFetchPost, customFetchDelete } from "../utility"
 import { successAlert, neutralAlert } from "../components/alert/alertSlice"
 
 // tasks/:pid/:sid
@@ -23,4 +23,10 @@ export const updateTask = (task) => customFetchUpdate(`/task`, task)
 // POST 
 
 // task
-export const postTask = ({ title, description, completed, due_date, section_id, project_id }) => customFetchPost(`/task`, { title, description, completed, due_date, section_id, project_id })
+export const postTask = ({ title, description, completed, due_date, section_id, project_id }) => customFetchPost(`/task`, { title, description, completed, due_date, section_id, project_id });
+
+
+export const deleteTask = (id) => customFetchDelete(`/task`, { id });
+
+
+

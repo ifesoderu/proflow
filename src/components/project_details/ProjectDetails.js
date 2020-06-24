@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, Route, Switch, useRouteMatch } from 'react-router-dom'
 import { getMemberProjects } from '../../services/projectServices'
 import { arrayToObject } from '../../utility'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,55 +12,67 @@ import DeleteIcon from '../../assets/img/deleteIcon.svg'
 import FavouriteIcon from '../../assets/img/favouriteIcon.svg'
 import { ProjectBoard } from '../project_board/ProjectBoard'
 import { ProjectComments } from '../project_comments/ProjectComments'
+import { setTeamIDofOpenedProject } from './teamIDofOpenedProjectSlice'
+import { ProjectProgress } from '../project_progress/ProjectProgress'
+import ProjectTimeline from '../project_timeline/ProjectTimeline'
 
 
-export const ProjectDetails = () => {
-    const { projectID } = useParams()
+export const ProjectDetails = ({ key }) => {
+    const { projectID } = useParams();
+    let { path } = useRouteMatch();
     const history = useHistory()
     const dispatch = useDispatch()
     const [activeTab, setActiveTab] = useState('board')
+    const [activeProjectID, setActiveProjectID] = useState(useParams().projectID)
     const openedProject = useSelector(state => state.openedProject)
     useEffect(() => {
         // if user is in a team that created this project then show user
         // Get teams that the user belongs to from team_membership
         // Get projects created by each team
+        // key(projectID)
         const email = localStorage.getItem('email')
         if (!email) { history.push('/login') }
+        setActiveProjectID(window.location.pathname.slice(9, 11));
         getMemberProjects(email).then(
             projects => {
-                const projectDetails = arrayToObject(projects, 'project_id')[projectID]
+                console.log(projects)
+                console.log(activeProjectID)
+                const projectDetails = arrayToObject(projects, 'project_id')[activeProjectID]
+                console.log(projectDetails)
                 if (!projectDetails) { throw Error(`You are not a member of the team that created the project`) }
                 dispatch(loadOpenProject(projectDetails))
+                dispatch(setTeamIDofOpenedProject(projectDetails.team_id))
             },
             error => {
+                console.log(error)
                 dispatch(errorAlert(error.toString()))
                 dispatch(neutralAlert())
                 history.push('/dashboard')
             }
         ).catch(error => {
+            console.log(error)
             dispatch(errorAlert(error.toString()))
             dispatch(neutralAlert())
             history.push('/dashboard')
         })
-    }, [])
+    }, [projectID])
     const renderActiveTab = param => {
-        console.log(openedProject)
         switch (param) {
             case 'board':
-                return <ProjectBoard projectID={projectID} projectDesc={openedProject.description} />
+                return <ProjectBoard projectID={activeProjectID} projectDesc={openedProject.description} />
             case 'timeline':
-
-                break;
+                return <ProjectTimeline />
             case 'comments':
-                return <ProjectComments projectID={projectID} />
+                return <ProjectComments projectID={activeProjectID} />
             case 'progress':
-
-                break;
+                return <ProjectProgress project={openedProject} />
 
             default:
                 break;
         }
     }
+    {/* // <Switch>
+        //     <Route path={`project/${projectID}`} key={projectID}> */}
     return (
         <div>
             <div className="w-full fixed z-20 bg-white">
@@ -101,5 +113,7 @@ export const ProjectDetails = () => {
                 {renderActiveTab(activeTab)}
             </div>
         </div>
+        //     </Route>
+        // </Switch>
     )
 }

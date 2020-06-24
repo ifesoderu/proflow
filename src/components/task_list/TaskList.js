@@ -6,7 +6,7 @@ import { Task } from './Task'
 import { neutralAlert } from '../alert/alertSlice'
 
 
-export const TaskList = () => {
+export const TaskList = ({ limit }) => {
     const dispatch = useDispatch()
     const myTasks = useSelector(state => state.myTasks)
     // const authentication = useSelector(state => state.authentication)
@@ -39,8 +39,27 @@ export const TaskList = () => {
     }
     return (
         <div>
-            {Object.keys(myTasks).map((taskIndex, index) => {
-                return (<Task task={myTasks[taskIndex]} handleTaskUpdate={handleTaskUpdate} />)
+            {limit && Object.values(myTasks).slice().sort((a, b) => {
+                if (b.due_date < a.due_date) {
+                    return -1
+                }
+                if (b.due_date > a.due_date) {
+                    return 1
+                }
+                return 0
+            }).slice(0, 3).map(({ id }, index) => {
+                return (<Task task={myTasks[id]} handleTaskUpdate={handleTaskUpdate} />)
+            })}
+            {!limit && Object.values(myTasks).slice().sort((a, b) => {
+                if (b.due_date < a.due_date) {
+                    return -1
+                }
+                if (b.due_date > a.due_date) {
+                    return 1
+                }
+                return 0
+            }).map(({ id }, index) => {
+                return (<Task task={myTasks[id]} handleTaskUpdate={handleTaskUpdate} />)
             })}
         </div >
     )

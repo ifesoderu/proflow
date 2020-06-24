@@ -23,6 +23,7 @@ export const customFetchGet = (path) => {
         .then(checkResponse)
 }
 
+
 export const customFetchPost = (path, body, onSuccess) => {
     return fetch(`${api_url}${path}`, {
         method: 'POST',
@@ -37,9 +38,23 @@ export const customFetchPost = (path, body, onSuccess) => {
     // })
 }
 
+
+
 export const customFetchUpdate = (path, body, onSuccess) => {
     return fetch(`${api_url}${path}`, {
         method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...body })
+    })
+        .then(handleResponse)
+};
+
+export const customFetchDelete = (path, body, onSuccess) => {
+    console.log(body)
+    return fetch(`${api_url}${path}`, {
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
