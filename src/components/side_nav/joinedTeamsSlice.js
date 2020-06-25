@@ -3,9 +3,10 @@ import { arrayToObject } from "../../utility";
 
 export const joinedTeamsSlice = createSlice({
     name: 'joinedTeam',
-    initialState: {},
+    initialState: [],
     reducers: {
-        getJoinedTeamsAction: (state, action) => action.payload
+        getJoinedTeamsAction: (state, action) => action.payload,
+        // addJoinedTeamsAction: (state, action) => ({...state, [action.pa]})
     }
 });
 

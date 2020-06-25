@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 
 export const isLoginRouteSlice = createSlice({
-    name: 'isLoginRoute',
-    initialState: window.location.pathname === '/login',
+    name: 'isLoggedIn',
+    initialState: false,
     reducers: {
-        authCompleted: (state, action) => false,
-        authNotCompleted: (state, action) => true
+        authCompleted: (state, action) => true,
+        authNotCompleted: (state, action) => false
     }
 })
 

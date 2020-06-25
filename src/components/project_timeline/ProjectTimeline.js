@@ -4,17 +4,46 @@ import Scheduler, { SchedulerData, ViewTypes, DATE_FORMAT } from 'react-big-sche
 import 'react-big-scheduler/lib/css/style.css'
 import moment from 'moment';
 import withDnDContext from '../../withDnDContext'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getProjectSections } from '../../services/sectionServices';
+import { loadSections } from '../project_board/loadedSectionsSlice';
+import { errorAlert, neutralAlertAsync } from '../alert/alertSlice';
+import { getTasksBySectionsAndProjectId } from '../../services/taskServices';
+import { loadTasks } from '../project_board/loadedTasksSlice';
+import { updateProject } from '../../services/projectServices';
 
 
 
-const ProjectTimeline = () => {
+const ProjectTimeline = ({ projectID }) => {
     const loadedSections = useSelector(state => state.loadedSections);
     const loadedTasks = useSelector(state => state.loadedTasks)
     const [resources, setResources] = useState([])
     const [events, setEvents] = useState([])
+    const dispatch = useDispatch()
+
 
     let schedulerData = new SchedulerData(new moment().format(DATE_FORMAT), ViewTypes.Month, false, false);
+
+    useEffect(() => {
+        getProjectSections(projectID).then(
+            sections => {
+                dispatch(loadSections(sections))
+            },
+            error => {
+                dispatch(errorAlert(error.toString()));
+                dispatch(neutralAlertAsync())
+            }
+        )
+        getTasksBySectionsAndProjectId(projectID).then(
+            data => {
+                dispatch(loadTasks(data))
+            }
+        )
+        return () => {
+            dispatch(loadSections([]))
+            dispatch(loadTasks([]))
+        }
+    }, [projectID])
 
     useEffect(() => {
         let resources = []
@@ -22,8 +51,6 @@ const ProjectTimeline = () => {
         Object.values(loadedSections).forEach(({ id, name }) => {
             resources.push({ id, name })
         })
-        console.log()
-
         Object.values(loadedTasks).slice().sort((a, b) => {
             if (b.due_date < a.due_date) {
                 return -1
@@ -45,47 +72,11 @@ const ProjectTimeline = () => {
         })
         setEvents(events);
         setResources(resources)
-    }, [])
-    schedulerData.setResources(resources);
-    // console.log(loadedTasks)
-    // let events = [
-    //     {
-    //         id: 1,
-    //         start: '2020-06-18 00:30:00',
-    //         end: '2020-06-18 23:30:00',
-    //         resourceId: 'r1',
-    //         title: 'I am finished',
-    //         bgColor: '#D9D9D9'
-    //     },
 
-    //     {
-    //         id: 3,
-    //         start: '2020-06-18 00:30:00',
-    //         end: '2020-06-18 23:30:00',
-    //         resourceId: 'r1',
-    //         title: 'I am not movable',
-    //         movable: false,
-    //         bgColor: '#000'
-    //     },
-    //     {
-    //         id: 4,
-    //         start: '2020-06-18 00:30:00',
-    //         end: '2020-06-18 23:30:00',
-    //         resourceId: 'r1',
-    //         title: 'I am not start-resizable',
-    //         startResizable: false,
-    //         bgColor: '#000'
-    //     },
-    //     {
-    //         id: 2,
-    //         start: '2020-06-25 00:30:00',
-    //         end: '2020-06-25 23:30:00',
-    //         resourceId: 'r1',
-    //         title: 'I am not resizable',
-    //         resizable: false,
-    //         bgColor: '#000'
-    //     },
-    // ];
+    }, [loadedTasks, loadedSections])
+
+    schedulerData.setResources(resources);
+
     schedulerData.setEvents(events);
     const prevClick = schedulerData => {
         schedulerData.prev();
@@ -103,6 +94,7 @@ const ProjectTimeline = () => {
     const eventClicked = () => {
 
     }
+
     return (
         <div className="px-10 pt-40 bg-white text-sm" style={{ minHeight: '100vh' }}>
             <Scheduler schedulerData={schedulerData}

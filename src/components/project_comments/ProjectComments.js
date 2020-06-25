@@ -17,13 +17,17 @@ export const ProjectComments = ({ projectID }) => {
                 dispatch(loadProjectComments(comments))
             }
         )
-    }, [])
+        return () => {
+            dispatch(loadProjectComments([]))
+        }
+    }, [projectID])
     const postComment = (body) => {
         postProjectComment(body).then(
             res => {
                 console.log(res)
                 if (res.success) {
                     dispatch(addProjectComment(res.data[0]))
+                    setNewComment('')
                 } else {
                     throw new Error('Could not post comment')
                 }
@@ -47,12 +51,12 @@ export const ProjectComments = ({ projectID }) => {
         })
     }
     return (
-        <div className="max-w-xl relative pt-5 mx-auto">
-            <div className="overflow-y-auto" style={{ height: '70%' }}>
+        <div className="max-w-xl relative pt-32 pt-5 mx-auto" style={{ minHeight: '100vh' }}>
+            <div className="overflow-y-auto" style={{ height: '50vh' }}>
                 {renderProjectComments(projectComments)}
             </div>
 
-            <div className="fixed w-full max-w-xl" style={{ backgroundColor: "#EFEFEF" }}>
+            <div className="fixed mt-4 w-full max-w-xl" style={{ backgroundColor: "#EFEFEF" }}>
                 <textarea placeholder="Ask a question or post an update..." value={newComment} onChange={e => { setNewComment(e.target.value) }} className="w-full p-4 h-20 border border-primaryred block rounded-lg mb-6" />
                 <button className="py-2 px-4 float-right" onClick={e => {
                     e.preventDefault()

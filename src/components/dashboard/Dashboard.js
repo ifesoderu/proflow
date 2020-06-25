@@ -8,6 +8,8 @@ import { loginSuccess } from '../login/loginSlice'
 import { ProjectList } from '../project_list/ProjectList'
 import { getFavouriteProjects } from '../project_list/favouriteProjectListSlice'
 import { getFavouritedProjects } from '../../services/projectServices'
+import { authNotCompleted } from '../login/isLoginRouteSlice'
+// import { getIsFirstTeam } from '../setup_team/isFirstTeamSlice'
 
 export const Dashboard = () => {
     const favouriteProjects = useSelector(state => state.favouriteProjects)
@@ -17,16 +19,25 @@ export const Dashboard = () => {
     useEffect(() => {
         const email = localStorage.getItem('email')
         if (!email) { history.push('/login') }
-
         getFavouritedProjects(email).then(data => { dispatch(getFavouriteProjects(data)) })
     }, [])
+
+    const handleMemberLogout = () => {
+        const logoutConfirmed = window.confirm("Are you sure you want to Logout?");
+        if (logoutConfirmed) {
+            localStorage.removeItem('email');
+            localStorage.removeItem('token')
+            dispatch(authNotCompleted())
+            history.push('/login')
+        }
+    }
     return (
         <div className='px-10 pt-16 bg-white ' >
             <div className="flex mx-auto max-w-6xl">
                 <div className="w-5/6">
                     <h2 className="font-bold">Dashboard</h2>
                 </div>
-                <span className="w-1/6 mx-auto"><img className="w-8 h-8 pt-2 float-right rounded-full border border-red-500 bg-gray-100" src={ProfileImage} alt="profile icon" /></span>
+                <span onClick={handleMemberLogout} className=" cursor-pointer w-1/6 mx-auto"><img className="w-8 h-8 pt-2 float-right rounded-full border border-red-500 bg-gray-100" src={ProfileImage} alt="profile icon" /></span>
             </div>
             <div>
                 <div className="max-w-3xl mt-10 mb-8  mx-auto">
@@ -45,7 +56,7 @@ export const Dashboard = () => {
             <div>
                 <div className="max-w-3xl mt-10 mb-8  mx-auto">
                     <div className="flex">
-                        <h3 className="flex-grow font-semibold">Projects</h3>
+                        <h3 className="flex-grow font-semibold">Favourited Projects</h3>
                         <button className="text-sm mt-1 py-0 bg-opacity-0"><span className="flex-grow font-medium  text-right text-gray-500"></span></button>
                         {/* <button className="text-sm mt-1 py-0 bg-opacity-0"><span className="flex-grow font-medium  text-right text-gray-500">View all</span></button> */}
                     </div>

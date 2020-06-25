@@ -21,7 +21,16 @@ export const ProjectTask = ({ title, id, description, completed, due_date, secti
         dispatch(openEditTaskModal())
     }
     useEffect(() => {
-        fetch(`${api_url}/assignedmembers/${id}`)
+        const token = window.localStorage.getItem('token');
+        const email = window.localStorage.getItem('email');
+
+        fetch(`${api_url}/assignedmembers/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': token,
+                'useremail': email
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 let memberEmailArr = data.memberEmails.map(({ member_email }) => member_email)

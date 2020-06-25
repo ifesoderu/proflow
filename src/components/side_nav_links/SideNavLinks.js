@@ -5,7 +5,9 @@ import { selectTeams, teamsSlice } from "../setup_team/teamsSlice"
 import { getTeams, getJoinedTeams } from '../../services/teamServices'
 import { getJoinedTeamsAction } from '../side_nav/joinedTeamsSlice'
 import TeamStatusDefault from '../../assets/img/TeamStatusDefault.svg'
-
+import { getJoinedProjects } from '../side_nav/joinedTeamProjectsSlice'
+import { openAddProjectModal } from '../project_list/addProjectModalSlice'
+import { openAddTeamModal } from '../side_nav/addTeamModalSlice'
 
 export const SideNavLinks = ({ routes }) => {
     const [showMoreProjects, setShowMoreProjects] = useState({})
@@ -13,29 +15,28 @@ export const SideNavLinks = ({ routes }) => {
 
     const teams = useSelector(state => state.teams);
     const joinedTeams = useSelector(state => state.joinedTeams)
-    const [joinedTeamProjects, setJoinedTeamProjects] = useState([])
-    console.log(joinedTeams)
+    const joinedTeamsProjects = useSelector(state => state.joinedTeamsProjects)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         const email = localStorage.getItem('email')
-        console.log(email)
         getTeams().then(
             (data) => {
-                console.log(data)
                 dispatch(teamsSlice.actions.getTeams(data))
             }
         )
         getJoinedTeams(email).then(
             (data) => {
                 dispatch(getJoinedTeamsAction(data.teamIDs))
-                setJoinedTeamProjects(data.teamProjects)
+                dispatch(getJoinedProjects(data.teamProjects))
             }
         )
     }, [])
 
-    console.log(joinedTeamProjects)
+    console.log(teams)
+    console.log(joinedTeams)
+
     return (
         <div>
             <ul className="mb-16 text-xl">
@@ -49,7 +50,7 @@ export const SideNavLinks = ({ routes }) => {
             <hr className="bg-opacity-50 border-red-300" />
             <ul className="mt-6">
                 <span className={"w-full block mb-3 pl-12 pr-40 text-lg text-red-300 font-bold"}>Teams</span>
-                {Object.keys(teams).filter(id => Object.values(joinedTeams).includes(parseInt(id, 10))).map((teamIndex, index) => {
+                {Object.keys(teams).filter(id => joinedTeams.includes(parseInt(id, 10))).map((teamIndex, index) => {
                     return (
                         <li className="text-xl mb-8">
                             <NavLink
@@ -61,7 +62,7 @@ export const SideNavLinks = ({ routes }) => {
                                 {teams[teamIndex].name}
                             </NavLink>
                             <div>
-                                {joinedTeamProjects.filter(({ team_id }) => team_id !== teamIndex).map(({ name, project_id }, index) => {
+                                {joinedTeamsProjects.filter(({ team_id }) => team_id === parseInt(teamIndex, 10)).map(({ name, project_id }, index) => {
                                     return (
                                         <NavLink
                                             to={`/project/${project_id}`}
@@ -76,13 +77,16 @@ export const SideNavLinks = ({ routes }) => {
                             </div>
                             {/* {[{ name: 'Develop Proflow' }, { name: 'Develop Proflow' }, { name: 'Develop Proflow' }, { name: 'Develop Proflow' }].length > 3 && showMoreProjects[index] === undefined && < button className="text-xs font-semibold py-0 pl-16 text-white" onClick={() => { setShowMoreProjects({ ...showMoreProjects, [index]: true }) }}>Show more projects</button>} */}
                             {
-                                [].length > 0 && <div className="text-base pl-16 text-white">
+                                joinedTeamsProjects.filter(({ team_id }) => team_id === parseInt(teamIndex, 10)).length === 0 && <div onClick={() => { dispatch(openAddProjectModal()) }} className=" cursor-pointer text-base pl-12 text-white">
                                     + Create Project
                             </div>
                             }
                         </li>
                     )
                 })}
+                <li className="text-base pl-12 mb-8">
+                    <button onClick={() => { dispatch(openAddTeamModal()) }} className="p-1">+ Add Team</button>
+                </li>
             </ul>
         </div >
     )

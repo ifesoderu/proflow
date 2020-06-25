@@ -4,10 +4,11 @@ import {
   Switch,
   Route,
   Link,
-  useParams
+  useParams,
+  Redirect
 } from 'react-router-dom';
 import { createSlice } from '@reduxjs/toolkit'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { SideNav } from './components/side_nav/SideNav'
 import { Login } from './components/login/Login'
@@ -23,25 +24,38 @@ import { Modal } from './components/modal/Modal'
 import { AddProject } from './components/add_project/AddProject';
 import { EditTask } from './components/edit_task/EditTask';
 import { getAllProjects } from './services/projectServices';
+import { AddTeam } from './components/add_team/AddTeam';
+import { EditProject } from './components/edit_project/EditProject';
+import { authCompleted } from './components/login/isLoginRouteSlice';
+import { getTeams } from './services/teamServices';
 
 const App = () => {
-  const isLoginRoute = useSelector(state => state.isLoginRoute)
+  const isLoggedIn = useSelector(state => state.isLoggedIn)
   const addProjectModal = useSelector(state => state.addProjectModal)
   const editTaskModal = useSelector(state => state.editTaskModal)
+  const addTeamModal = useSelector(state => state.addTeamModal)
+  const editProjectModal = useSelector(state => state.editProjectModal)
   const currentlyOpenedTask = useSelector(state => state.currentlyOpenedTask)
   const routes = [
-    { path: '/', Main: () => <Login /> },
     { path: '/login', Main: () => <Login /> },
     { path: '/dashboard', Main: () => <Dashboard />, title: "Dashboard" },
     { path: '/tasks', Main: () => <MyTasks />, title: "My Tasks" },
-    { path: '/setup-team', Main: () => <SetupTeam /> },
-    { path: `/project/:projectID`, Main: () => <ProjectDetails /> },
+    { path: '/setupteam', Main: () => <SetupTeam /> },
+    { path: `/project`, Main: () => <ProjectDetails /> },
     { path: `/team/:teamID`, Main: () => <TeamDetails /> },
   ]
+  const dispatch = useDispatch()
+  // if (!localStorage.getItem('email')) return <Redirect to="/login" />
+  useEffect(() => {
+    if (localStorage.getItem('email') || localStorage.getItem('token')) {
+      dispatch(authCompleted())
+    }
+
+  }, [])
 
   return (
     <Router>
-      <div className={isLoginRoute ? "absolute top-0 left-0" : "absolute top-0 right-0"}>
+      <div className={isLoggedIn ? "absolute top-0 left-0" : "absolute top-0 right-0"}>
         <Alert className="z-40" />
       </div>
       {addProjectModal && (
@@ -54,26 +68,41 @@ const App = () => {
           <EditTask task={currentlyOpenedTask} />
         </Modal>
       )}
-      <div className={isLoginRoute ? '' : 'flex'}>
-        <div className={isLoginRoute ? '' : 'max-w-xs z-30 fixed'}>
-          {!isLoginRoute && < SideNav routes={routes} />}
+      {addTeamModal && (
+        <Modal>
+          <AddTeam />
+        </Modal>
+      )}
+      {editProjectModal && (
+        <Modal>
+          <EditProject />
+        </Modal>
+      )}
+      <div className={!isLoggedIn ? '' : 'flex'}>
+        <div className={!isLoggedIn ? '' : 'max-w-xs z-30 fixed'}>
+          {isLoggedIn && < SideNav routes={routes} />}
         </div>
-        <div className={isLoginRoute ? 'w-full' : 'flex-grow float-right z-0'} >
+        <div className={!isLoggedIn ? 'w-full' : 'flex-grow float-right z-0'} >
           <div className="flex" >
-            <div className={!isLoginRoute && "max-w-xs w-88"}></div>
-            <div className="flex-grow" style={isLoginRoute ? { backgroundColor: "#fff" } : { backgroundColor: "#EFEFEF" }}>
+            <div className={isLoggedIn && "max-w-xs w-88"}></div>
+            <div className="flex-grow" style={!isLoggedIn ? { backgroundColor: "#fff" } : { backgroundColor: "#EFEFEF" }}>
               <Switch>
                 {
                   routes.map(({ path, Main, title }, index) => (
 
+                    // <ProtectedRoute isLoggedIn={isLoggedIn}>
                     <Route
                       key={index}
                       path={path}
-                      exact
-                      children={<Main />}
+                      render={() => isLoggedIn ? <Main /> : <Login />}
                     />
+                    // </ProtectedRoute>
                   ))
                 }
+                <Route path="*">
+                  <h3>Seems like you're lost</h3>
+                  <p>Error 404</p>
+                </Route>
               </Switch>
             </div>
           </div>
@@ -82,5 +111,6 @@ const App = () => {
     </Router>
   )
 }
+
 
 export default App;

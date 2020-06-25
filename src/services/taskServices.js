@@ -28,5 +28,7 @@ export const postTask = ({ title, description, completed, due_date, section_id, 
 
 export const deleteTask = (id) => customFetchDelete(`/task`, { id });
 
+export const unAssignMember = (member_email, task_id) => customFetchDelete(`/assignedmember`, { member_email, task_id })
+
 
 

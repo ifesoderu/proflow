@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { successAlert } from '../alert/alertSlice';
 import { closeEditTaskModal } from '../project_board/editTaskModalSlice';
 import AddDueDateIcon from '../../assets/img/addDueDateIcon.svg'
-import { updateTask } from '../../services/taskServices';
+import { updateTask, unAssignMember } from '../../services/taskServices';
 import { editTask } from '../project_board/loadedTasksSlice';
 import { getTeamMembers, assignMemberToTask } from '../../services/memberServices';
 
@@ -57,8 +57,12 @@ export const EditTask = ({ task }) => {
         )
     }
 
-    const handleDeleteMemberEmail = () => {
-
+    const handleDeleteMemberEmail = (email, taskID) => {
+        unAssignMember(email, taskID).then(
+            res => {
+                setAssignedMembers(assignedMembers.filter((member_email) => member_email !== email))
+            }
+        )
     }
 
     const handleAssignMember = (e, id) => {
@@ -88,7 +92,7 @@ export const EditTask = ({ task }) => {
                     <div>
                         <div className="block flex mb-3">
                             {assignedMembers.map(memberEmail => (
-                                <button onClick={() => { handleDeleteMemberEmail() }} value={memberEmail} className="p-0 p-1 rounded-lg text-xs">{memberEmail}X</button>
+                                <button onClick={e => { handleDeleteMemberEmail(e.target.value, id) }} value={memberEmail} className="p-0 p-1  mr-3 rounded-lg text-xs">{memberEmail}  X</button>
                             ))}
                         </div>
                         <select

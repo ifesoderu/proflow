@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import ProflowFullLogo from '../../assets/img/ProflowFullLogo.svg'
 import authImage from '../../assets/img/authImage.svg'
@@ -7,6 +7,7 @@ import { loginRequest, loginFailure, loginSuccess, logout, selectAuth } from './
 import { authCompleted, authNotCompleted } from './isLoginRouteSlice'
 import { neutralAlertAsync } from '../alert/alertSlice'
 import { useHistory } from 'react-router-dom';
+import { getTeams } from '../../services/teamServices';
 export const Login = (store) => {
     const auth = useSelector(selectAuth)
     const [email, setEmail] = useState('')
@@ -24,8 +25,17 @@ export const Login = (store) => {
                 dispatch(neutralAlertAsync())
                 dispatch(authCompleted())
                 localStorage.setItem('email', email)
-                localStorage.setItem('token', data)
-                history.push('/dashboard')
+                localStorage.setItem('token', data.data)
+                getTeams().then(
+                    res => {
+                        console.log(res)
+                        if (res.length === 0) {
+                            history.push('/setupteam')
+                        } else {
+                            history.push('/dashboard')
+                        }
+                    }
+                )
             },
             error => {
                 dispatch(loginFailure(error.toString()))
@@ -38,7 +48,7 @@ export const Login = (store) => {
         })
     }
     return (
-        <div className="flex h-screen">
+        <div className="flex" style={{ minHeight: '100vh' }}>
             <div className="w-full md:w-2/5">
                 <div className="w-full max-w-xs mx-auto">
                     <div className="my-8"><img src={ProflowFullLogo} alt="proflow logo" /></div>

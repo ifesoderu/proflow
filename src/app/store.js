@@ -16,21 +16,31 @@ import joinedTeamsReducer from '../components/side_nav/joinedTeamsSlice';
 import editTaskModalReducer from '../components/project_board/editTaskModalSlice';
 import currentlyOpenedTaskReducer from '../components/project_board/currentlyOpenedTaskSlice';
 import teamIDofOpenedProjectReducer from '../components/project_details/teamIDofOpenedProjectSlice';
+import joinedTeamProjectsReducer from '../components/side_nav/joinedTeamProjectsSlice';
+import addTeamModalReducer from '../components/side_nav/addTeamModalSlice';
+import editProjectModalReducer from '../components/project_details/editProjectModalSlice';
+import membersReducer from '../components/project_board/membersSlice';
+import isFirstTeamReducer from '../components/setup_team/isFirstTeamSlice';
 
 
 export default configureStore({
   reducer: {
-    isLoginRoute: isLoginReducer,
+    isLoggedIn: isLoginReducer,
     authentication: loginReducer || { email: localStorage.getItem('email') },
     alert: alertReducer,
     teams: teamsReducer,
+    isFirstTeam: isFirstTeamReducer,
+    members: membersReducer,
     teamIDofOpenedProject: teamIDofOpenedProjectReducer,
     joinedTeams: joinedTeamsReducer,
+    joinedTeamsProjects: joinedTeamProjectsReducer,
     myTasks: myTaskListReducer,
     currentlyOpenedTask: currentlyOpenedTaskReducer,
     favouriteProjects: favouriteProjectListReducer,
     addProjectModal: addProjectModalReducer,
     editTaskModal: editTaskModalReducer,
+    editProjectModal: editProjectModalReducer,
+    addTeamModal: addTeamModalReducer,
     openedProject: openedProjectReducer,
     loadedSections: loadedSectionsReducer,
     loadedTasks: loadedTasksReducer,

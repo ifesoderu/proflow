@@ -6,21 +6,27 @@ import ScrumBoardImage from '../../assets/img/ScrumBoardImage.svg'
 import { addFirstTeam } from './setupTeamService'
 import { successAlert, errorAlert, neutralAlertAsync } from '../alert/alertSlice'
 import { data } from 'autoprefixer'
+import { useHistory } from 'react-router-dom'
+import { addTeamMember } from '../../services/memberServices'
 
 
 
 export const SetupTeam = () => {
     const [name, setName] = useState('')
+    const history = useHistory()
 
     const dispatch = useDispatch();
 
     const handleAddFirstTeam = e => {
+        const member_email = localStorage.getItem('email')
         addFirstTeam(name).then(
-            ({ message, data }) => {
+            ({ message, data, }) => {
                 const { id, name } = data[0]
                 dispatch(addTeam({ id, name }))
+                addTeamMember(member_email, id)
                 dispatch(successAlert(message))
                 dispatch(neutralAlertAsync())
+                history.push('/dashboard')
             },
             error => {
                 dispatch(errorAlert(error.toString()))

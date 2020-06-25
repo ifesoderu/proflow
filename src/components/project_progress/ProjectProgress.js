@@ -3,9 +3,10 @@ import ViewStatus from '../../assets/img/viewProjectStatusIcon.svg'
 import { getTasksBySectionsAndProjectId } from '../../services/taskServices'
 import { loadTasks } from '../project_board/loadedTasksSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { updateProject } from '../../services/projectServices'
+import { editOpenProject } from '../project_details/openedProjectSlice'
 
 export const ProjectProgress = ({ project }) => {
-    console.log(project)
     const { status, project_id } = project
     const [newStatus, setNewStatus] = useState(status)
     const [tasksToShow, setTasksToshow] = useState([]);
@@ -15,13 +16,15 @@ export const ProjectProgress = ({ project }) => {
     useEffect(() => {
         getTasksBySectionsAndProjectId(project_id).then(
             data => {
-                console.log(data)
                 dispatch(loadTasks(data))
             }
         )
         const tasks = Object.values(loadedTasks).filter(({ completed }) => completed === true)
         setTasksToshow(tasks)
-    }, [])
+        return () => {
+            dispatch(loadTasks([]))
+        }
+    }, [project])
     const renderStatusText = status => {
         switch (status) {
             case "on track":
@@ -68,14 +71,24 @@ export const ProjectProgress = ({ project }) => {
         const tasks = Object.values(loadedTasks).filter(({ completed }) => !completed)
         setTasksToshow([])
     }
+    const handleEditProjectClick = (status) => {
+        setNewStatus(status)
+        updateProject({ ...project, status }).then(
+            res => {
+                dispatch(editOpenProject(res.data[0]))
+            }
+        )
+    }
+
     return (
         <div className="mx-auto max-w-3xl pt-48" style={{ minHeight: '100vh' }}>
             <div className="flex mb-10">
-                <h2 className="font-bold w-4/5">
+                <h2 className="font-bold w-9/12">
                     We're {renderStatusText(newStatus)}
                 </h2>
-                <select className="w-1/5 border border-gray-700 rounded-lg p-2" onChange={e => { setNewStatus(e.target.value) }}>
-                    <option selected={true} value="on track">on track</option>
+                <select className="w-3/12 border border-gray-700 rounded-lg p-2" onChange={e => { handleEditProjectClick(e.target.value) }}>
+                    <option selected={true} hidden={true} disabled={true}>Select project status</option>
+                    <option value="on track">on track</option>
                     <option value="at risk">at risk</option>
                     <option value="off track">off track</option>
                 </select>

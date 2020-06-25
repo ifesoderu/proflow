@@ -5,6 +5,7 @@ import ProfileImage from '../../assets/img/profileImage.svg'
 import { TaskList } from '../task_list/TaskList'
 import { useDispatch, useSelector } from 'react-redux'
 import { ProjectList } from '../project_list/ProjectList'
+import { authNotCompleted } from '../login/isLoginRouteSlice'
 
 export const MyTasks = () => {
     const dispatch = useDispatch()
@@ -28,13 +29,22 @@ export const MyTasks = () => {
         }))
 
     }, [])
+    const handleMemberLogout = () => {
+        const logoutConfirmed = window.confirm("Are you sure you want to Logout?");
+        if (logoutConfirmed) {
+            localStorage.removeItem('email');
+            localStorage.removeItem('token')
+            dispatch(authNotCompleted())
+            history.push('/login')
+        }
+    }
     return (
         <div className='px-10 pt-16 bg-white' style={{ minHeight: '100vh' }}>
             <div className="flex max-w-6xl mx-auto">
                 <div className="w-5/6">
                     <h2 className="font-bold">My Tasks</h2>
                 </div>
-                <span className="w-1/6 mx-auto"><img className="w-8 h-8 pt-2 float-right rounded-full border border-red-500 bg-gray-100" src={ProfileImage} alt="profile icon" /></span>
+                <span onClick={handleMemberLogout} className=" cursor-pointer w-1/6 mx-auto"><img className="w-8 h-8 pt-2 float-right rounded-full border border-red-500 bg-gray-100" src={ProfileImage} alt="profile icon" /></span>
             </div>
             <div style={{ minHeight: '90vh' }}>
                 <div className="max-w-3xl mt-10 mb-8  mx-auto">
