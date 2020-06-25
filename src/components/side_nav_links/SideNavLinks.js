@@ -34,9 +34,6 @@ export const SideNavLinks = ({ routes }) => {
         )
     }, [])
 
-    console.log(teams)
-    console.log(joinedTeams)
-
     return (
         <div>
             <ul className="mb-16 text-xl">

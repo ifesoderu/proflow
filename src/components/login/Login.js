@@ -19,7 +19,6 @@ export const Login = (store) => {
         dispatch(loginRequest({ email }))
         loginPostRequest(email, password).then(
             (data) => {
-                console.log(data)
                 if (!data.success) { throw new Error(`${data.message}`) }
                 dispatch(loginSuccess({ email, data }))
                 dispatch(neutralAlertAsync())
@@ -28,7 +27,6 @@ export const Login = (store) => {
                 localStorage.setItem('token', data.data)
                 getTeams().then(
                     res => {
-                        console.log(res)
                         if (res.length === 0) {
                             history.push('/setupteam')
                         } else {

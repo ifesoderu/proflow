@@ -22,7 +22,6 @@ export const AddProject = () => {
     if (!creatorEmail) { history.push('/login'); return; }
 
     const handleAddProjectClick = (projectName, projectDescription, teamID, creatorEmail, projectPrivacy) => {
-        console.log(teamID)
         addNewProjects({
             name: projectName,
             description: projectDescription,
@@ -39,7 +38,6 @@ export const AddProject = () => {
             }
         )
     }
-    console.log(teamID)
     return (
         <div ref={wrapperRef} className="z-50 py-10 px-12 absolute bg-white rounded-lg" style={{ top: '6.25rem', width: '40.6rem', right: '22%', boxShadow: '0px 4px 15px #e3e3e3' }}>
             <h2 className="font-semibold text-left" style={{ marginBottom: '1.875rem' }}>New Project</h2>

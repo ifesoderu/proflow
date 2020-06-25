@@ -27,7 +27,6 @@ export const SideNav = ({ routes }) => {
             }
         )
     }, [params])
-    // console.log(isFirstTeam)
     return (
         <div className="inline-block h-screen overflow-y-scroll bg-primaryred" style={{ width: '21rem', maxWidth: '21rem' }}>
             <div className="py-10 mx-auto w-64 flex">

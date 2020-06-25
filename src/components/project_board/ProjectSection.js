@@ -41,6 +41,8 @@ export const ProjectSection = ({ name, id, tasks, projectID }) => {
         )
     }
     const handleDeleteSection = id => {
+        const proceedWithDeletion = window.confirm('Kindly confirm that you want to delete this Section')
+        if (!proceedWithDeletion) return;
         deleteSection(id).then(
             res => {
                 dispatch(deleteSelectedSection({ id }))
@@ -49,7 +51,7 @@ export const ProjectSection = ({ name, id, tasks, projectID }) => {
     }
 
     const handleDeleteTask = (id, sectionID) => {
-        const proceedWithDeletion = window.confirm('Proceed with task deletion')
+        const proceedWithDeletion = window.confirm('Kindly confirm that you want to delete this Task')
         if (!proceedWithDeletion) return;
         deleteTask(id.id).then(
             res => {

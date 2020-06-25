@@ -29,7 +29,6 @@ export const EditTask = ({ task }) => {
     const teamIDofOpenedProject = useSelector(state => state.teamIDofOpenedProject)
 
     useEffect(() => {
-        console.log(teamIDofOpenedProject)
         getTeamMembers(teamIDofOpenedProject).then(
             res => {
                 const teamMemberEmailArr = res.map(({ member_email }) => member_email)
@@ -109,7 +108,7 @@ export const EditTask = ({ task }) => {
                 </div>
                 <div onClick={() => setShowDueDateInput(true)} className="flex items-center w-1/2 bg-opacity-0">
                     <span className="w-2/5 mr-3"><img src={AddDueDateIcon} alt="add due date" className="float-right h-8" /></span>
-                    {showDueDateInput && < input placeholder="Enter Due Date" value={dueDate} className='focus:outline-none h-12 flex-grow' onChange={e => { setDueDate(e.target.value) }} />}
+                    {showDueDateInput && < input placeholder="ex. 2020-05-29" value={dueDate} className='focus:outline-none h-12 flex-grow' onChange={e => { setDueDate(e.target.value) }} />}
                 </div>
             </div>
             <div className="flex mb-5">

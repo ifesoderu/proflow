@@ -45,7 +45,6 @@ export const ProjectDetail = (props) => {
                 const projectDetails = arrayToObject(projects, 'project_id')[projectID]
                 if (!projectDetails) { throw Error(`You are not a member of the team that created the project`) }
                 dispatch(loadOpenProject(projectDetails))
-                console.log(projectDetails)
                 dispatch(setTeamIDofOpenedProject(projectDetails.team_id))
             },
             error => {
@@ -96,6 +95,8 @@ export const ProjectDetail = (props) => {
     };
 
     const handleDeleteProject = projectID => {
+        const confirm = window.confirm("Kindly confirm that you want to delete this project permanently")
+        if (!confirm) return;
         deleteProject({ project_id: projectID }).then(
             res => {
                 dispatch(deleteOpenProject({ project_id: projectID }))
@@ -103,10 +104,6 @@ export const ProjectDetail = (props) => {
             }
         )
     }
-    // const handleEditProject = () => {
-    //     updateProject()
-    // }
-    // console.lo
     const handleMemberLogout = () => {
         const logoutConfirmed = window.confirm("Are you sure you want to Logout?");
         if (logoutConfirmed) {

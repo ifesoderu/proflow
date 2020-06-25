@@ -24,7 +24,6 @@ export const ProjectComments = ({ projectID }) => {
     const postComment = (body) => {
         postProjectComment(body).then(
             res => {
-                console.log(res)
                 if (res.success) {
                     dispatch(addProjectComment(res.data[0]))
                     setNewComment('')

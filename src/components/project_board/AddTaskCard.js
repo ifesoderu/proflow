@@ -7,8 +7,8 @@ export const AddTaskCard = ({ sectionID, projectID, closeAddTaskCard }) => {
     const [title, setTitle] = useState('')
     const dispatch = useDispatch()
     const checkKeyEntered = e => {
+        if (title.length < 1) return
         if (e.keyCode === 13) {
-            // console.log({ title, section_id: sectionID, project_id: projectID })
             postTask({ title, section_id: sectionID, project_id: projectID }).then(
                 res => {
                     if (!res.success) {
@@ -23,7 +23,7 @@ export const AddTaskCard = ({ sectionID, projectID, closeAddTaskCard }) => {
     }
     return (
         <div className="py-1 px-3.5 w-full h-20 mb-5 bg-white rounded-lg">
-            <input className="border-0 outline-none p-0" value={title} onChange={e => { setTitle(e.target.value) }} onKeyDown={checkKeyEntered} />
+            <input className="border-0 outline-none p-0" placeholder="Press enter to create" value={title} onChange={e => { setTitle(e.target.value) }} onKeyDown={checkKeyEntered} />
         </div>
     )
 }

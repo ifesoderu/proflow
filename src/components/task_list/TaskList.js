@@ -9,9 +9,7 @@ import { neutralAlert } from '../alert/alertSlice'
 export const TaskList = ({ limit }) => {
     const dispatch = useDispatch()
     const myTasks = useSelector(state => state.myTasks)
-    // const authentication = useSelector(state => state.authentication)
     let email = localStorage.getItem('email')
-    console.log(email)
     useEffect(() => {
         getTasksByIds(email).then(data => { dispatch(getMyTasks(data)) })
     }, [])
@@ -34,7 +32,6 @@ export const TaskList = ({ limit }) => {
                 dispatch(neutralAlert())
             }
         ).catch(e => {
-            console.log(e)
         })
     }
     return (

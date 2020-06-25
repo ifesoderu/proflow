@@ -21,7 +21,6 @@ export const AddTeam = () => {
         createTeam(name, description).then(
             res => {
                 const team = res.data[0]
-                console.log(team)
                 dispatch(addTeam(team))
                 dispatch(closeAddTeamModal())
                 addTeamMember(email, team.id)

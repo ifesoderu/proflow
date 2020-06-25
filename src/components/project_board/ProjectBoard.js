@@ -42,7 +42,6 @@ export const ProjectBoard = ({ projectID, projectDesc }) => {
             }
         )
         return () => {
-            console.log('ooo')
             dispatch(addNestedSections({}))
             dispatch(loadSections([]))
             dispatch(loadTasks([]))
@@ -128,7 +127,6 @@ export const ProjectBoard = ({ projectID, projectDesc }) => {
 
             },
             err => {
-                console.log(err.toString())
             }
         )
 

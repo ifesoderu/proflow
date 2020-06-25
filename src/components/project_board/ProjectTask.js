@@ -34,7 +34,6 @@ export const ProjectTask = ({ title, id, description, completed, due_date, secti
             .then(res => res.json())
             .then(data => {
                 let memberEmailArr = data.memberEmails.map(({ member_email }) => member_email)
-                console.log(memberEmailArr)
                 setMemberEmails(memberEmailArr)
             })
 
