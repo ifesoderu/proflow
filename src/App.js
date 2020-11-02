@@ -90,13 +90,11 @@ const App = () => {
                 {
                   routes.map(({ path, Main, title }, index) => (
 
-                    // <ProtectedRoute isLoggedIn={isLoggedIn}>
                     <Route
                       key={index}
                       path={path}
                       render={() => isLoggedIn ? <Main /> : <Login />}
                     />
-                    // </ProtectedRoute>
                   ))
                 }
                 <Route path="*">
